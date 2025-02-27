@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:allergeo/models/places/city_model.dart';
-import 'package:allergeo/models/places/place_model.dart';
+import 'package:allergeo/models/places/abstract/place_model.dart';
 
 class DistrictModel extends PlaceModel {
   final CityModel city;

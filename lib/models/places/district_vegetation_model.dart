@@ -1,6 +1,7 @@
+import 'dart:convert';
 import 'package:allergeo/models/allergies/allergen_model.dart';
 import 'package:allergeo/models/places/district_model.dart';
-import 'package:allergeo/models/places/vegetation_model.dart';
+import 'package:allergeo/models/places/abstract/vegetation_model.dart';
 
 class DistrictVegetationModel extends VegetationModel {
   final DistrictModel district;
@@ -29,4 +30,9 @@ class DistrictVegetationModel extends VegetationModel {
   String toString() {
     return "${super.toString()} - ${district.name}";
   }
+}
+
+List<DistrictVegetationModel> districtVegetationsFromJson(String str) {
+  final jsonData = json.decode(str);
+  return List<DistrictVegetationModel>.from(jsonData.map((x) => DistrictVegetationModel.fromJson(x)));
 }

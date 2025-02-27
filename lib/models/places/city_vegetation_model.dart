@@ -1,6 +1,7 @@
+import 'dart:convert';
 import 'package:allergeo/models/allergies/allergen_model.dart';
 import 'package:allergeo/models/places/city_model.dart';
-import 'package:allergeo/models/places/vegetation_model.dart';
+import 'package:allergeo/models/places/abstract/vegetation_model.dart';
 
 class CityVegetationModel extends VegetationModel {
   final CityModel city;
@@ -29,4 +30,9 @@ class CityVegetationModel extends VegetationModel {
   String toString() {
     return "${super.toString()} - ${city.name}";
   }
+}
+
+List<CityVegetationModel> cityVegetationsFromJson(String str) {
+  final jsonData = json.decode(str);
+  return List<CityVegetationModel>.from(jsonData.map((x) => CityVegetationModel.fromJson(x)));
 }

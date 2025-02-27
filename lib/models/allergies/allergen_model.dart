@@ -1,15 +1,14 @@
 import 'dart:convert';
-
 import 'package:allergeo/models/allergies/allergen_type_model.dart';
 
 class AllergenModel {
   final int id;
   final String name;
-  final String speciesName;
-  final String family;
-  final String familyLink;
+  final String? speciesName;
+  final String? family;
+  final String? familyLink;
   final List<String> images;
-  final String link;
+  final String? link;
   final AllergenTypeModel allergenType;
 
   AllergenModel({
