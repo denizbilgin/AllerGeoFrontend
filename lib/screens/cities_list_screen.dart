@@ -1,5 +1,5 @@
 import 'package:allergeo/models/places/city_model.dart';
-import 'package:allergeo/services/city_service.dart';
+import 'package:allergeo/services/places/city_service.dart';
 import 'package:flutter/material.dart';
 
 class CitiesListScreen extends StatefulWidget {

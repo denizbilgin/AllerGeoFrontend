@@ -1,0 +1,71 @@
+import 'dart:convert';
+import 'package:allergeo/models/places/district_model.dart';
+import 'package:allergeo/models/places/district_vegetation_model.dart';
+import 'package:http/http.dart' as http;
+import '../../config/constants.dart';
+
+class DistrictService {
+  final String districtsUrl = "${AppConstants.placesUrl}districts/";
+
+  Future<List<DistrictModel>> fetchDistricts() async {
+    try {
+      final response = await http.get(Uri.parse(districtsUrl));
+
+      if (response.statusCode == 200) {
+        String data = utf8.decode(response.bodyBytes);
+        return districtsFromJson(data);
+      } else {
+        throw "İlçeler yüklenemedi. Hata kodu: ${response.statusCode}";
+      }
+    } catch (e) {
+      throw "Bir hata oluştu $e";
+    }
+  }
+
+  Future<DistrictModel> fetchDistrictById(int districtId) async {
+    try {
+      final response = await http.get(Uri.parse("$districtsUrl$districtId"));
+
+      if (response.statusCode == 200) {
+        String data = utf8.decode(response.bodyBytes);
+        final Map<String, dynamic> jsonData = json.decode(data);
+        return DistrictModel.fromJson(jsonData);
+      } else {
+        throw "İlçe yüklenemedi. Hata kodu: ${response.statusCode}";
+      }
+    } catch (e) {
+      throw "Bir hata oluştu $e";
+    }
+  }
+
+  Future<DistrictModel> fetchDistrictByName(String districtName) async {
+    try {
+      final response = await http.get(Uri.parse("$districtsUrl$districtName"));
+
+      if (response.statusCode == 200) {
+        String data = utf8.decode(response.bodyBytes);
+        final Map<String, dynamic> jsonData = json.decode(data);
+        return DistrictModel.fromJson(jsonData);
+      } else {
+        throw "İlçe yüklenemedi. Hata kodu: ${response.statusCode}";
+      }
+    } catch (e) {
+      throw "Bir hata oluştu $e";
+    }
+  }
+
+  Future<List<DistrictVegetationModel>> fetchDistrictVegetation(int districtId) async {
+    try {
+      final response = await http.get(Uri.parse("$districtsUrl$districtId/vegetation"));
+
+      if (response.statusCode == 200) {
+        String data = utf8.decode(response.bodyBytes);
+        return districtVegetationsFromJson(data);
+      } else {
+        throw "İlçe bitki örtüsü verisi yüklenemedi. Hata kodu: ${response.statusCode}";
+      }
+    } catch (e) {
+      throw "Bir hata oluştu $e";
+    }
+  }
+}

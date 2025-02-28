@@ -1,5 +1,5 @@
 import 'package:allergeo/models/places/district_model.dart';
-import 'package:allergeo/services/district_service.dart';
+import 'package:allergeo/services/places/district_service.dart';
 import 'package:flutter/material.dart';
 
 class DistrictListScreen extends StatefulWidget {

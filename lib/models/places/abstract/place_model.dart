@@ -35,6 +35,6 @@ class PlaceModel {
 
   @override
   String toString() {
-    return name;
+    return "$id - $name";
   }
 }
