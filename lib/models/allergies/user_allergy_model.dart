@@ -3,17 +3,17 @@ import 'package:allergeo/models/allergies/allergen_model.dart';
 import 'package:allergeo/models/users/user_model.dart';
 
 class UserAllergyModel {
-  final int id;
-  final UserModel user;
+  final int? id;
+  UserModel? user;
   final AllergenModel allergen;
-  final DateTime creationDate;
+  final DateTime? creationDate;
   final int importanceLevel;
 
   UserAllergyModel({
-    required this.id,
-    required this.user,
+    this.id,
+    this.user,
     required this.allergen,
-    required this.creationDate,
+    this.creationDate,
     required this.importanceLevel
   });
 
@@ -21,16 +21,23 @@ class UserAllergyModel {
   factory UserAllergyModel.fromJson(Map<String, dynamic> json) {
     return UserAllergyModel(
       id: json['id'],
-      user: UserModel.fromJson(json['user']),
+      user: json['user'] != null ? UserModel.fromJson(json['user']) : null,
       allergen: AllergenModel.fromJson(json['allergen']),
       creationDate: DateTime.parse(json['creation_date']),
       importanceLevel: json["importance_level"]
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      "allergen_id": allergen.id,
+      "importance_level": importanceLevel
+    };
+  }
+
   @override
   String toString() {
-    return "${user.firstName} ${user.lastName} - ${allergen.name} - $importanceLevel";
+    return "${user?.firstName} ${user?.lastName} - ${allergen.name} - $importanceLevel";
   }
 }
 

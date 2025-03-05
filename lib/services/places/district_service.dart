@@ -9,16 +9,16 @@ class DistrictService {
 
   Future<List<DistrictModel>> fetchDistricts() async {
     try {
-      final response = await http.get(Uri.parse(districtsUrl));
+      final response = await http.get(Uri.parse(districtsUrl.substring(0, districtsUrl.length - 1)));
 
       if (response.statusCode == 200) {
         String data = utf8.decode(response.bodyBytes);
         return districtsFromJson(data);
       } else {
-        throw "İlçeler yüklenemedi. Hata kodu: ${response.statusCode}";
+        throw jsonDecode(response.body).values.first;
       }
     } catch (e) {
-      throw "Bir hata oluştu $e";
+      throw "Bir hata oluştu: $e";
     }
   }
 
@@ -30,11 +30,13 @@ class DistrictService {
         String data = utf8.decode(response.bodyBytes);
         final Map<String, dynamic> jsonData = json.decode(data);
         return DistrictModel.fromJson(jsonData);
+      } else if(response.statusCode == 404){
+        throw jsonDecode(response.body).values.first;
       } else {
-        throw "İlçe yüklenemedi. Hata kodu: ${response.statusCode}";
+        throw jsonDecode(response.body).values.first;
       }
     } catch (e) {
-      throw "Bir hata oluştu $e";
+      throw "Bir hata oluştu: $e";
     }
   }
 
@@ -46,11 +48,13 @@ class DistrictService {
         String data = utf8.decode(response.bodyBytes);
         final Map<String, dynamic> jsonData = json.decode(data);
         return DistrictModel.fromJson(jsonData);
+      } else if(response.statusCode == 404){
+        throw jsonDecode(response.body).values.first;
       } else {
-        throw "İlçe yüklenemedi. Hata kodu: ${response.statusCode}";
+        throw jsonDecode(response.body).values.first;
       }
     } catch (e) {
-      throw "Bir hata oluştu $e";
+      throw "Bir hata oluştu: $e";
     }
   }
 
@@ -61,11 +65,13 @@ class DistrictService {
       if (response.statusCode == 200) {
         String data = utf8.decode(response.bodyBytes);
         return districtVegetationsFromJson(data);
+      } else if(response.statusCode == 404){
+        throw jsonDecode(response.body).values.first;
       } else {
-        throw "İlçe bitki örtüsü verisi yüklenemedi. Hata kodu: ${response.statusCode}";
+        throw jsonDecode(response.body).values.first;
       }
     } catch (e) {
-      throw "Bir hata oluştu $e";
+      throw "Bir hata oluştu: $e";
     }
   }
 }

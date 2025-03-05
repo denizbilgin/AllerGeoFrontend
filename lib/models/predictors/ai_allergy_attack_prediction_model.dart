@@ -19,10 +19,10 @@ class AIAllergyAttackPredictionModel {
     required this.user,
     required this.date,
     required this.district,
-    required this.aiPrediction,
-    required this.hadAllergyAttack,
-    required this.model,
-    required this.travel
+    this.aiPrediction,
+    this.hadAllergyAttack,
+    this.model,
+    this.travel
   });
 
   // Factory constructor
@@ -32,11 +32,23 @@ class AIAllergyAttackPredictionModel {
       user: UserModel.fromJson(json['user']),
       date: DateTime.parse(json['date']),
       district: DistrictModel.fromJson(json['district']),
-      aiPrediction: json['ai_prediction'],
+      aiPrediction: (json['ai_prediction'] as num?)?.toDouble(),
       hadAllergyAttack: json['had_allergy_attack'],
-      model: AIModelModel.fromJson(json['model']),
-      travel: TravelModel.fromJson(json["travel"])
+      model: json['model'] != null ? AIModelModel.fromJson(json['model']) : null,
+      travel: json['travel'] != null ? TravelModel.fromJson(json["travel"]) : null,
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "user_id": user.id,
+      "date": date.toIso8601String(),
+      "district_id": district.id,
+      "ai_prediction": aiPrediction,
+      "had_allergy_attack": hadAllergyAttack,
+      "model_id": model?.id,
+      "travel_id": travel?.id,
+    };
   }
 
   @override

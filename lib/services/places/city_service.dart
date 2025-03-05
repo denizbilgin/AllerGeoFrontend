@@ -9,16 +9,16 @@ class CityService {
 
   Future<List<CityModel>> fetchCities() async {
     try {
-      final response = await http.get(Uri.parse(citiesUrl));
+      final response = await http.get(Uri.parse(citiesUrl.substring(0, citiesUrl.length - 1)));
 
       if (response.statusCode == 200) {
         String data = utf8.decode(response.bodyBytes);
         return citiesFromJson(data);
       } else {
-        throw "Şehirler yüklenemedi. Hata kodu: ${response.statusCode}";
+        throw jsonDecode(response.body).values.first;
       }
     } catch (e) {
-      throw "Bir hata oluştu $e";
+      throw "Bir hata oluştu: $e";
     }
   }
 
@@ -30,11 +30,13 @@ class CityService {
         String data = utf8.decode(response.bodyBytes);
         final Map<String, dynamic> jsonData = json.decode(data);
         return CityModel.fromJson(jsonData);
+      } else if(response.statusCode == 404){
+        throw jsonDecode(response.body).values.first;
       } else {
-        throw "Şehir yüklenemedi. Hata kodu: ${response.statusCode}";
+        throw jsonDecode(response.body).values.first;
       }
     } catch (e) {
-      throw "Bir hata oluştu $e";
+      throw "Bir hata oluştu: $e";
     }
   }
 
@@ -46,11 +48,13 @@ class CityService {
         String data = utf8.decode(response.bodyBytes);
         final Map<String, dynamic> jsonData = json.decode(data);
         return CityModel.fromJson(jsonData);
+      } else if(response.statusCode == 404){
+        throw jsonDecode(response.body).values.first;
       } else {
-        throw "Şehir yüklenemedi. Hata kodu: ${response.statusCode}";
+        throw jsonDecode(response.body).values.first;
       }
     } catch (e) {
-      throw "Bir hata oluştu $e";
+      throw "Bir hata oluştu: $e";
     }
   }
 
@@ -61,11 +65,13 @@ class CityService {
       if (response.statusCode == 200) {
         String data = utf8.decode(response.bodyBytes);
         return cityVegetationsFromJson(data);
+      } else if(response.statusCode == 404){
+        throw jsonDecode(response.body).values.first;
       } else {
-        throw "Şehir bitki örtüsü verisi yüklenemedi. Hata kodu: ${response.statusCode}";
+        throw jsonDecode(response.body).values.first;
       }
     } catch (e) {
-      throw "Bir hata oluştu $e";
+      throw "Bir hata oluştu: $e";
     }
   }
 }

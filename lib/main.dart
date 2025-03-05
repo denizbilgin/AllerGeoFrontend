@@ -1,21 +1,23 @@
-import 'package:allergeo/models/places/city_model.dart';
-import 'package:allergeo/models/places/city_vegetation_model.dart';
-import 'package:allergeo/models/places/district_model.dart';
-import 'package:allergeo/models/places/district_vegetation_model.dart';
-import 'package:allergeo/screens/districts_list_screen.dart';
-import 'package:allergeo/services/places/city_service.dart';
+import 'package:allergeo/models/allergies/allergen_model.dart';
+import 'package:allergeo/models/allergies/user_allergy_model.dart';
+import 'package:allergeo/models/predictors/ai_allergy_attack_prediction_model.dart';
+import 'package:allergeo/models/users/user_model.dart';
+import 'package:allergeo/services/allergies/allergen_service.dart';
 import 'package:allergeo/services/places/district_service.dart';
+import 'package:allergeo/services/predictors/ai_allergy_attack_prediction_service.dart';
+import 'package:allergeo/services/users/user_service.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // Flutter'da main'de async işler yapmak için gerekli.
 
   try {
-    DistrictService service = DistrictService();
-    List<DistrictVegetationModel> vegetations = await service.fetchDistrictVegetation(114);
-    print("Data: $vegetations");
+    UserService service = UserService();
+    
+    var data = await service.fetchUserAllergyAttackById(5, 13);
+    print("Data: $data");
   } catch (e) {
-    print("Hata oluştu: $e");
+    print(e);
   }
 }
 
