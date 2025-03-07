@@ -22,9 +22,9 @@ class TravelModel {
     return TravelModel(
       id: json['id'],
       user: UserModel.fromJson(json['user']),
-      creationDate: DateTime.parse(json['creation_date']),
-      startDate: DateTime.parse(json['start_date']),
-      returnDate: DateTime.parse(json['return_date']),
+      creationDate: DateTime.parse(json['creation_date']).toLocal(),
+      startDate: DateTime.parse(json['start_date']).toLocal(),
+      returnDate: DateTime.parse(json['return_date']).toLocal(),
     );
   }
 

@@ -26,8 +26,8 @@ class AIModelModel {
       name: json['name'],
       filePath: json['file_path'],
       description: json['description'],
-      creationDate: DateTime.parse(json['creation_date']),
-      lastUpdateDate: DateTime.parse(json['last_update_date']),
+      creationDate: DateTime.parse(json['creation_date']).toLocal(),
+      lastUpdateDate: DateTime.parse(json['last_update_date']).toLocal(),
       version: json['version'],
     );
   }

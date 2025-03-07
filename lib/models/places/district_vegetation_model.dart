@@ -19,8 +19,8 @@ class DistrictVegetationModel extends VegetationModel {
     return DistrictVegetationModel(
       id: json['id'],
       gbifNumber: json["gbif_number"],
-      lastUpdateDate: DateTime.parse(json["last_update_date"]),
-      creationDate: DateTime.parse(json["creation_date"]),
+      lastUpdateDate: DateTime.parse(json["last_update_date"]).toLocal(),
+      creationDate: DateTime.parse(json["creation_date"]).toLocal(),
       allergen: AllergenModel.fromJson(json['allergen']),
       district: DistrictModel.fromJson(json['district']),
     );

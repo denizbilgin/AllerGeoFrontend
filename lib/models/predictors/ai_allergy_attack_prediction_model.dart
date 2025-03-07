@@ -5,17 +5,17 @@ import 'package:allergeo/models/users/travel_model.dart';
 import 'package:allergeo/models/users/user_model.dart';
 
 class AIAllergyAttackPredictionModel {
-  final int id;
+  final int? id;
   final UserModel user;
   final DateTime date;
-  final DistrictModel district;
+  DistrictModel district;
   final double? aiPrediction;
-  final bool? hadAllergyAttack;
+  bool? hadAllergyAttack;
   final AIModelModel? model;
   final TravelModel? travel;
 
   AIAllergyAttackPredictionModel({
-    required this.id,
+    this.id,
     required this.user,
     required this.date,
     required this.district,
@@ -30,7 +30,7 @@ class AIAllergyAttackPredictionModel {
     return AIAllergyAttackPredictionModel(
       id: json['id'],
       user: UserModel.fromJson(json['user']),
-      date: DateTime.parse(json['date']),
+      date: DateTime.parse(json['date']).toLocal(),
       district: DistrictModel.fromJson(json['district']),
       aiPrediction: (json['ai_prediction'] as num?)?.toDouble(),
       hadAllergyAttack: json['had_allergy_attack'],
@@ -44,9 +44,7 @@ class AIAllergyAttackPredictionModel {
       "user_id": user.id,
       "date": date.toIso8601String(),
       "district_id": district.id,
-      "ai_prediction": aiPrediction,
       "had_allergy_attack": hadAllergyAttack,
-      "model_id": model?.id,
       "travel_id": travel?.id,
     };
   }

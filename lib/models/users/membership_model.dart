@@ -23,8 +23,8 @@ class MembershipModel {
       id: json['id'],
       user: UserModel.fromJson(json['user']),
       membershipType: MembershipTypeModel.fromJson(json['membership_type']),
-      startDate: DateTime.parse(json['start_date']),
-      endDate: DateTime.parse(json['end_date'])
+      startDate: DateTime.parse(json['start_date']).toLocal(),
+      endDate: DateTime.parse(json['end_date']).toLocal()
     );
   }
 

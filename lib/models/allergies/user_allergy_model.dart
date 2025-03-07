@@ -23,7 +23,7 @@ class UserAllergyModel {
       id: json['id'],
       user: json['user'] != null ? UserModel.fromJson(json['user']) : null,
       allergen: AllergenModel.fromJson(json['allergen']),
-      creationDate: DateTime.parse(json['creation_date']),
+      creationDate: DateTime.parse(json['creation_date']).toLocal(),
       importanceLevel: json["importance_level"]
     );
   }
