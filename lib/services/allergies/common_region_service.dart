@@ -1,5 +1,4 @@
 import 'package:allergeo/config/constants.dart';
-import 'package:allergeo/models/allergies/allergen_model.dart';
 import 'package:allergeo/models/allergies/common_region_model.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';

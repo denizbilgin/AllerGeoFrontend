@@ -1,7 +1,4 @@
-import 'package:allergeo/models/predictors/ai_allergy_attack_prediction_model.dart';
-import 'package:allergeo/services/places/district_service.dart';
 import 'package:allergeo/services/users/travel_service.dart';
-import 'package:allergeo/services/users/user_service.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
