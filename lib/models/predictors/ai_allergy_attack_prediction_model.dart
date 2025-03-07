@@ -59,3 +59,7 @@ List<AIAllergyAttackPredictionModel> aiAllergyAttackPredictionsFromJson(String s
   final jsonData = json.decode(str);
   return List<AIAllergyAttackPredictionModel>.from(jsonData.map((x) => AIAllergyAttackPredictionModel.fromJson(x)));
 }
+
+List<Map<String, dynamic>> toJsonMultiple(List<AIAllergyAttackPredictionModel> multipleWaypoints) {
+    return multipleWaypoints.map((prediction) => prediction.toJson()).toList();
+}

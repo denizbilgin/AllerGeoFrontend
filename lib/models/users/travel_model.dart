@@ -3,16 +3,16 @@ import 'dart:convert';
 import 'package:allergeo/models/users/user_model.dart';
 
 class TravelModel {
-  final int id;
+  final int? id;
   final UserModel user;
-  final DateTime creationDate;
+  final DateTime? creationDate;
   DateTime startDate;
   DateTime? returnDate;
 
   TravelModel({
-    required this.id,
+    this.id,
     required this.user,
-    required this.creationDate,
+    this.creationDate,
     required this.startDate,
     required this.returnDate
   });
@@ -26,6 +26,14 @@ class TravelModel {
       startDate: DateTime.parse(json['start_date']).toLocal(),
       returnDate: DateTime.parse(json['return_date']).toLocal(),
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "user_id": user.id,
+      "start_date": startDate.toIso8601String(),
+      "return_date": returnDate?.toIso8601String()
+    };
   }
 
   @override

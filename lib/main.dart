@@ -1,3 +1,6 @@
+import 'package:allergeo/models/predictors/ai_allergy_attack_prediction_model.dart';
+import 'package:allergeo/services/places/district_service.dart';
+import 'package:allergeo/services/users/travel_service.dart';
 import 'package:allergeo/services/users/user_service.dart';
 import 'package:flutter/material.dart';
 
@@ -5,9 +8,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // Flutter'da main'de async işler yapmak için gerekli.
 
   try {
-    UserService service = UserService();
-    
-    var data = await service.fetchUserTravels(5);
+    var service = TravelService();
+    var data = await service.deleteUserTravel(5, 6);
     print("Data: $data");
   } catch (e) {
     print(e);
