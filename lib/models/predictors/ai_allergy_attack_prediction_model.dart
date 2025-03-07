@@ -6,13 +6,13 @@ import 'package:allergeo/models/users/user_model.dart';
 
 class AIAllergyAttackPredictionModel {
   final int? id;
-  final UserModel user;
-  final DateTime date;
+  UserModel user;
+  DateTime date;
   DistrictModel district;
-  final double? aiPrediction;
+  double? aiPrediction;
   bool? hadAllergyAttack;
   final AIModelModel? model;
-  final TravelModel? travel;
+  TravelModel? travel;
 
   AIAllergyAttackPredictionModel({
     this.id,

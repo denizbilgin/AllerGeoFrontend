@@ -3,22 +3,22 @@ import 'package:allergeo/models/places/district_model.dart';
 
 class UserModel {
   final int id;
-  final String? photo;
+  String? photo;
   final DateTime dateJoined;
-  final DistrictModel residenceDistrict;
-  final DateTime dateOfBirth;
-  final String phoneNumber;
+  DistrictModel residenceDistrict;
+  DateTime dateOfBirth;
+  String phoneNumber;
   final String username;
-  final String firstName;
-  final String lastName;
-  final String email;
-  final String password;
+  String firstName;
+  String lastName;
+  String email;
+  String password;
   final DateTime lastLogin;
   final bool isSuperUser;
   final bool isStaff;
-  final bool isActive;
-  final List<String> groups;
-  final List<String> userPermissions;
+  bool isActive;
+  List<String> groups;
+  List<String> userPermissions;
 
   UserModel({
     required this.id,

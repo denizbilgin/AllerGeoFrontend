@@ -5,9 +5,9 @@ import 'package:allergeo/models/users/user_model.dart';
 class MembershipModel {
   final int id;
   final UserModel user;
-  final MembershipTypeModel membershipType;
-  final DateTime startDate;
-  final DateTime endDate;
+  MembershipTypeModel membershipType;
+  DateTime startDate;
+  DateTime endDate;
 
   MembershipModel({
     required this.id,

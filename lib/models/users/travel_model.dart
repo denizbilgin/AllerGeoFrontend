@@ -6,8 +6,8 @@ class TravelModel {
   final int id;
   final UserModel user;
   final DateTime creationDate;
-  final DateTime startDate;
-  final DateTime? returnDate;
+  DateTime startDate;
+  DateTime? returnDate;
 
   TravelModel({
     required this.id,

@@ -5,9 +5,9 @@ import 'package:allergeo/models/users/user_model.dart';
 class UserAllergyModel {
   final int? id;
   UserModel? user;
-  final AllergenModel allergen;
+  AllergenModel allergen;
   final DateTime? creationDate;
-  final int importanceLevel;
+  int importanceLevel;
 
   UserAllergyModel({
     this.id,
