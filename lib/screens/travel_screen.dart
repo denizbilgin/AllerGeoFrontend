@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class TravelCreationScreen extends StatelessWidget {
-  const TravelCreationScreen({super.key});
+class TravelScreen extends StatelessWidget {
+  const TravelScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

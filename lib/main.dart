@@ -1,7 +1,7 @@
 import 'package:allergeo/config/constants.dart';
 import 'package:allergeo/screens/home_screen.dart';
 import 'package:allergeo/screens/profile_screen.dart';
-import 'package:allergeo/screens/travel_creation_screen.dart';
+import 'package:allergeo/screens/travel_screen.dart';
 import 'package:allergeo/screens/user_allergies_screen.dart';
 import 'package:allergeo/screens/user_allergy_attacks_screen.dart';
 import 'package:allergeo/utils/strings.dart';
@@ -19,7 +19,6 @@ class AllerGeoApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'AllerGeo',
       theme: ThemeData(
         primarySwatch: AppColors.ALLERGEO_GREEN,
       ),
@@ -40,11 +39,11 @@ class _MainPageState extends State<MainPage> {
   int currentIndex = 2;
 
   final List<Widget> screens = [
-    HomeScreen(),
-    TravelCreationScreen(),
+    TravelScreen(),
     UserAllergiesScreen(),
-    ProfileScreen(),
-    UserAllergyAttacksScreen()
+    HomeScreen(),
+    UserAllergyAttacksScreen(),
+    ProfileScreen()
   ];
 
   @override
@@ -56,11 +55,6 @@ class _MainPageState extends State<MainPage> {
         child: ClipRect(
           child: Scaffold(
             extendBody: true,
-            appBar: AppBar(
-              title: Text(Strings.APP_NAME),
-              elevation: 0,
-              centerTitle: true,
-            ),
             body: screens[currentIndex],
             bottomNavigationBar: CustomBottomNavigationBar(
               currentIndex: currentIndex,

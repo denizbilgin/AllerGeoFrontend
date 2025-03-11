@@ -36,6 +36,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
   curved_navigation_bar: ^1.0.1
+  flutter_svg: ^2.0.9
 
 dev_dependencies:
   flutter_test:
@@ -58,6 +59,13 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  assets:
+    - assets\icons\map-icon.svg
+    - assets\images\forest-background.png
+    - assets\images\people-travelling.png
+    - assets\images\traveller.png
+    - assets\images\luggages.svg
 
   # To add assets to your application, add an assets section, like this:
   # assets:
