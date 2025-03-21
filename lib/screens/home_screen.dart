@@ -1,4 +1,4 @@
-import 'package:allergeo/config/constants.dart';
+import 'package:allergeo/config/colors.dart';
 import 'package:allergeo/utils/strings.dart';
 import 'package:allergeo/widgets/home_card.dart';
 import 'package:flutter/material.dart';
@@ -18,32 +18,31 @@ class HomeScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: AppColors.ALLERGEO_GREEN,
-      appBar: AppBar(
-        title: const Text(Strings.APP_NAME),
-        backgroundColor: AppColors.ALLERGEO_GREEN,
-      ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Center(
-              child: Stack(
-                alignment: Alignment.bottomCenter,
-                children: [
-                  Image.asset(
-                    "assets/images/forest-background.png",
-                    height: 200,
-                    width: double.infinity,
-                    fit: BoxFit.cover
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 50),
-                    child: Image.asset(
-                      "assets/images/people-travelling.png",
+              child: Padding(
+                padding: const EdgeInsets.only(top: 70),
+                child: Stack(
+                  alignment: Alignment.bottomCenter,
+                  children: [
+                    Image.asset(
+                      "assets/images/forest-background.png",
                       height: 200,
+                      width: double.infinity,
+                      fit: BoxFit.cover
                     ),
-                  )
-                ],
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 50),
+                      child: Image.asset(
+                        "assets/images/people-travelling.png",
+                        height: 200,
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
             Transform.translate(

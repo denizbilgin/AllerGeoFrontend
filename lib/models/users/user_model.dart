@@ -3,7 +3,6 @@ import 'package:allergeo/models/places/district_model.dart';
 
 class UserModel {
   final int id;
-  String? photo;
   final DateTime dateJoined;
   DistrictModel residenceDistrict;
   DateTime dateOfBirth;
@@ -13,16 +12,17 @@ class UserModel {
   String lastName;
   String email;
   String password;
-  final DateTime lastLogin;
+  final DateTime? lastLogin;
+  final bool isMale;
   final bool isSuperUser;
   final bool isStaff;
   bool isActive;
-  List<String> groups;
+  List<int> groups;
   List<String> userPermissions;
+  int age;
 
   UserModel({
     required this.id,
-    required this.photo,
     required this.dateJoined,
     required this.residenceDistrict,
     required this.dateOfBirth,
@@ -38,6 +38,8 @@ class UserModel {
     required this.isActive,
     required this.groups,
     required this.userPermissions,
+    required this.isMale,
+    required this.age
   });
 
   // Factory constructor
@@ -51,15 +53,16 @@ class UserModel {
       email: json['email'],
       phoneNumber: json['phone_number'],
       password: json['password'],
-      lastLogin: DateTime.parse(json['last_login']).toLocal(),
+      lastLogin: json['last_login'] != null ? DateTime.parse(json['last_login']).toLocal() : null,
       isSuperUser: json['is_superuser'] as bool,
       isStaff: json['is_staff'] as bool,
       isActive: json['is_active'] as bool,
-      photo: json['photo'],
       dateJoined: DateTime.parse(json['date_joined']).toLocal(),
       dateOfBirth: DateTime.parse(json['date_of_birth']).toLocal(),
-      groups: List<String>.from(json['groups'] ?? []),
+      groups: List<int>.from(json['groups'] ?? []),
       userPermissions: List<String>.from(json['user_permissions'] ?? []),
+      isMale: json['is_male'] as bool,
+      age: json['age'] as int
     );
   }
   /*
