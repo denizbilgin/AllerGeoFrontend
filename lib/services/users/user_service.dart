@@ -111,10 +111,8 @@ class UserService {
       final jwt = JWT.verify(token, SecretKey(secretKey));
       int exp = jwt.payload['exp'] * 1000;
       int now = DateTime.now().millisecondsSinceEpoch;
-      print(now);
       int remainingSeconds = (exp - now) ~/ 1000;
       double remainingMinutes = remainingSeconds / 60;
-      print(remainingMinutes);
       return remainingMinutes;
     } catch (e) {
       return -1;
@@ -145,5 +143,42 @@ class UserService {
         (route) => false,
       );
     });
+  }
+
+  String getUserAvatarImage(UserModel? user) {
+    if (user?.isMale == true) {
+      return 'assets/images/man-avatar.jpg';
+    } else {
+      return 'assets/images/woman-avatar.jpg';
+    }
+  }
+
+  Future<UserModel> updateUser(int userId, Map<String, dynamic> updatedData) async {
+    try {
+      String token = await getUserAccessToken();
+      final response = await http.patch(
+        Uri.parse("$usersUrl$userId"),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+        body: json.encode(updatedData),
+      );
+
+      if (response.statusCode == 200) {
+        String data = utf8.decode(response.bodyBytes);
+        final Map<String, dynamic> jsonData = json.decode(data);
+        return UserModel.fromJson(jsonData);
+      } else if (response.statusCode == 401) {
+        await logout();
+        throw "Token yenilenemedi. Lütfen tekrar giriş yapın.";
+      } else if (response.statusCode == 404) {
+        throw jsonDecode(response.body).values.first;
+      } else {
+        throw jsonDecode(response.body).values.first;
+      }
+    } catch (e) {
+      throw "Bir hata oluştu: $e";
+    }
   }
 }

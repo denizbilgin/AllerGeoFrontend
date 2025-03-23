@@ -1,6 +1,8 @@
 import 'package:allergeo/config/colors.dart';
 import 'package:allergeo/models/users/user_model.dart';
+import 'package:allergeo/screens/update_profile_screen.dart';
 import 'package:allergeo/services/users/user_service.dart';
+import 'package:allergeo/widgets/profile_menu.dart';
 import 'package:flutter/material.dart';
 import 'login_screen.dart';
 
@@ -41,19 +43,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  String getUserAvatarImage() {
-    if (user?.isMale == true) {
-      return 'assets/images/man-avatar.jpg';
-    } else {
-      return 'assets/images/woman-avatar.jpg';
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body:
-          SingleChildScrollView(
+          user == null
+              ? const Center(
+                child: CircularProgressIndicator(
+                  color: AppColors.ALLERGEO_GREEN,
+                ),
+              )
+              : SingleChildScrollView(
                 child: Container(
                   padding: const EdgeInsets.all(20),
                   child: Center(
@@ -66,7 +66,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             height: 120,
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(100),
-                              child: Image.asset(getUserAvatarImage()),
+                              child: Image.asset(
+                                service.getUserAvatarImage(user),
+                              ),
                             ),
                           ),
                         ),
@@ -78,13 +80,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        Text('Hogeldiniz!'),
+                        Text('Hoş Geldiniz!'),
                         SizedBox(height: 20),
                         SizedBox(
                           width: 200,
                           child: ElevatedButton(
-                            onPressed:
-                                () => null,
+                            onPressed: () {
+                              showModalBottomSheet(
+                                context: context,
+                                builder: (context) => UpdateProfileScreen(user: user)
+                              );
+                            },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppColors.ALLERGEO_GREEN,
                               side: BorderSide.none,
@@ -96,9 +102,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                           ),
                         ),
-                        ElevatedButton(
-                          onPressed: () => service.logout(),
-                          child: Text("Çıkış Yap"),
+                        const SizedBox(height: 30),
+                        const Divider(),
+                        const SizedBox(height: 10),
+
+                        ProfileMenu(
+                          title: "Ayarlar",
+                          icon: Icons.settings,
+                          onPress: () {},
+                        ),
+                        ProfileMenu(
+                          title: "Üyeliğim",
+                          icon: Icons.wallet,
+                          onPress: () {},
+                        ),
+                        const Divider(),
+                        const SizedBox(height: 10),
+                        ProfileMenu(
+                          title: "AllerGeo Hakkında",
+                          icon: Icons.info,
+                          onPress: () {},
+                        ),
+                        ProfileMenu(
+                          title: 'Çıkış Yap',
+                          icon: Icons.logout,
+                          endIcon: false,
+                          textColor: Colors.red,
+                          onPress: () async {
+                            await service.logout();
+                          },
                         ),
                       ],
                     ),
