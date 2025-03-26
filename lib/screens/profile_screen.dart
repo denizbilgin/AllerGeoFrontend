@@ -23,7 +23,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _fetchUserInfo();
   }
 
-  Future<void> _fetchUserInfo() async {
+  Future<int> _getUserId() async {
     try {
       String token = await service.getUserAccessToken();
       if (token == null) {
@@ -31,9 +31,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
           context,
           MaterialPageRoute(builder: (context) => LoginScreen()),
         );
-        return;
+        return 0;
       }
       final userId = await service.getUserIdFromToken(token);
+      return userId;
+    } catch (e) {
+      print('User ID alınırken hata: $e');
+      return 0;
+    }
+  }
+
+  Future<void> _fetchUserInfo() async {
+    try {
+      int userId = await _getUserId();
       final fetchedUser = await service.fetchUserById(userId);
       setState(() {
         user = fetchedUser;

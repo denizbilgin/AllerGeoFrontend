@@ -11,7 +11,14 @@ class UserAllergyService {
   
   Future<List<UserAllergyModel>> fetchUserAllergies(int userId) async {
     try {
-      final response = await http.get(Uri.parse("$usersUrl$userId/allergies"));
+      String token = await userService.getUserAccessToken();
+      final response = await http.get(
+        Uri.parse("$usersUrl$userId/allergies"),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+      );
 
       if (response.statusCode == 200) {
         String data = utf8.decode(response.bodyBytes);
@@ -85,12 +92,13 @@ class UserAllergyService {
   Future<UserAllergyModel> updateUserAllergy(UserAllergyModel userAllergy) async {
     try {
       final url = "$usersUrl${userAllergy.user?.id}/allergies/${userAllergy.id}";
-      
+
+      String token = await userService.getUserAccessToken();
       final response = await http.patch(
         Uri.parse(url),
         headers: {
-          "Content-Type": "application/json",
-          // "Authorization": "Bearer $token"
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
         },
         body: jsonEncode(userAllergy.toJson()),
       );
@@ -114,12 +122,13 @@ class UserAllergyService {
   Future<bool> deleteUserAllergy(int userId, int userAllergyId) async {
     try {
       final url = "$usersUrl$userId/allergies/$userAllergyId";
-      
+
+      String token = await userService.getUserAccessToken();
       final response = await http.delete(
         Uri.parse(url),
         headers: {
           "Content-Type": "application/json",
-          // "Authorization": "Bearer $token"
+          "Authorization": "Bearer $token"
         }
       );
 
