@@ -175,8 +175,8 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _usernamePasswordWidget() {
     return Column(
       children: <Widget>[
-        _entryField("Username"),
-        _entryField("Password", isPassword: true),
+        _entryField("Kullanıcı Adı"),
+        _entryField("Şifre", isPassword: true),
       ],
     );
   }

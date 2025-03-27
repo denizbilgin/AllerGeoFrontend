@@ -66,11 +66,12 @@ class UserAllergyService {
     try {
       final url = "$usersUrl${userAllergy.user?.id}/allergies";
       
+      String token = await userService.getUserAccessToken();
       final response = await http.post(
         Uri.parse(url),
         headers: {
-          "Content-Type": "application/json",
-          // "Authorization": "Bearer $token"
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
         },
         body: jsonEncode(userAllergy.toJson()),
       );

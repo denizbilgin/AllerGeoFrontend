@@ -226,11 +226,18 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                           ),
                         ),
                       ),
-                      readOnly: true, // Sadece takvimle seçilmesini sağlıyoruz.
+                      readOnly: true,
                       onTap: () => _selectDate(context),
                     ),
                     const SizedBox(height: 16),
-
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Yaşadığınız ilçe:',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
                     DropdownSearch<(String, int)>(
                       selectedItem: _selectedDistrict,
                       items: (f, cs) => _districts,

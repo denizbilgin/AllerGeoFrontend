@@ -45,6 +45,53 @@ class UserAllergiesListItem extends StatelessWidget {
     );
   }
 
+  void _showDeleteConfirmation(BuildContext context, var userAllergy) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          titlePadding: EdgeInsets.zero,
+          title: ClipRRect(
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(16),
+            ),
+            child: Container(
+              padding: EdgeInsets.all(16),
+              color: AppColors.ALLERGEO_GREEN,
+              child: Text(
+                'Alerjiyi Sil',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+          content: Text('Bu alerjiyi silmek istediğinize emin misiniz?'),
+          actionsPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('İptal', style: TextStyle(color: Colors.grey)),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                onDelete(userAllergy);
+              },
+              child: Text('Evet', style: TextStyle(color: Colors.red)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -78,10 +125,11 @@ class UserAllergiesListItem extends StatelessWidget {
                           style: TextStyle(fontStyle: FontStyle.italic),
                         ),
                         TextSpan(
-                          text: userAllergy.creationDate
-                              ?.toLocal()
-                              .toString()
-                              .split(' ')[0],
+                          text:
+                              userAllergy.creationDate
+                                  ?.toLocal()
+                                  .toString()
+                                  .split(' ')[0],
                         ),
                       ],
                     ),
@@ -90,7 +138,10 @@ class UserAllergiesListItem extends StatelessWidget {
                   Align(
                     alignment: Alignment.centerRight,
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 6,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.white.withOpacity(0.3),
                         borderRadius: BorderRadius.circular(8),
@@ -112,7 +163,8 @@ class UserAllergiesListItem extends StatelessWidget {
                 top: -12,
                 child: IconButton(
                   icon: Icon(Icons.close, color: Colors.white),
-                  onPressed: () => onDelete(userAllergy),
+                  onPressed:
+                      () => _showDeleteConfirmation(context, userAllergy),
                 ),
               ),
             ],

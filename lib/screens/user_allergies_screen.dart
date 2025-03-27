@@ -1,5 +1,6 @@
 import 'package:allergeo/config/colors.dart';
 import 'package:allergeo/models/allergies/user_allergy_model.dart';
+import 'package:allergeo/screens/add_user_allergy_screen.dart';
 import 'package:allergeo/screens/login_screen.dart';
 import 'package:allergeo/services/users/user_allergy_service.dart';
 import 'package:allergeo/services/users/user_service.dart';
@@ -88,6 +89,24 @@ class _UserAllergiesScreen extends State<UserAllergiesScreen> {
     }
   }
 
+  void _showAddAllergyModal(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: false,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder:
+          (context) => AddUserAllergyScreen(
+            onAdd: (newAllergy) {
+              setState(() {
+                _fetchUserAllergies();
+              });
+            },
+          ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -117,6 +136,11 @@ class _UserAllergiesScreen extends State<UserAllergiesScreen> {
                   ),
                 ],
               ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _showAddAllergyModal(context),
+        backgroundColor: AppColors.ALLERGEO_GREEN,
+        child: const Icon(Icons.add, color: Colors.white,),
+      ),
     );
   }
 }

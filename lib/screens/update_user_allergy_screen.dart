@@ -4,6 +4,7 @@ import 'package:allergeo/models/users/user_model.dart';
 import 'package:allergeo/screens/login_screen.dart';
 import 'package:allergeo/services/users/user_allergy_service.dart';
 import 'package:allergeo/services/users/user_service.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 
 class UpdateUserAllergyScreen extends StatefulWidget {
@@ -29,6 +30,14 @@ class _UpdateUserAllergyScreen extends State<UpdateUserAllergyScreen> {
     super.initState();
     _selectedImportanceLevel = widget.userAllergy.importanceLevel;
   }
+
+  final List<(String, int)> _importanceLevels = [
+    ("Çok Düşük", 1),
+    ("Düşük", 2),
+    ("Orta", 3),
+    ("Yüksek", 4),
+    ("Çok Yüksek", 5),
+  ];
 
   void _updateAllergy() async {
     try {
@@ -92,21 +101,92 @@ class _UpdateUserAllergyScreen extends State<UpdateUserAllergyScreen> {
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 16),
-          DropdownButton<int>(
-            value: _selectedImportanceLevel,
-            isExpanded: true,
-            items: [
-              DropdownMenuItem(value: 1, child: Text("Çok Düşük")),
-              DropdownMenuItem(value: 2, child: Text("Düşük")),
-              DropdownMenuItem(value: 3, child: Text("Orta")),
-              DropdownMenuItem(value: 4, child: Text("Yüksek")),
-              DropdownMenuItem(value: 5, child: Text("Çok Yüksek")),
-            ],
-            onChanged: (value) {
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              'Önem Seviyesi:',
+              style: TextStyle(fontSize: 16),
+            ),
+          ),
+          SizedBox(height: 8),
+          DropdownSearch<(String, int)>(
+            selectedItem: (_importanceLevels.firstWhere(
+              (element) => element.$2 == _selectedImportanceLevel,
+              orElse: () => ("Orta", 3),
+            )),
+            items: (f, cs) => _importanceLevels,
+            compareFn: (item1, item2) => item1.$2 == item2.$2,
+            itemAsString: (item) => item.$1,
+            onChanged: (selectedImportance) {
               setState(() {
-                _selectedImportanceLevel = value!;
+                _selectedImportanceLevel =
+                    selectedImportance?.$2 ?? _selectedImportanceLevel;
               });
             },
+            suffixProps: DropdownSuffixProps(
+              dropdownButtonProps: DropdownButtonProps(
+                iconClosed: Icon(Icons.keyboard_arrow_down),
+                iconOpened: Icon(Icons.keyboard_arrow_up),
+              ),
+            ),
+            decoratorProps: DropDownDecoratorProps(
+              textAlign: TextAlign.center,
+              decoration: InputDecoration(
+                contentPadding: EdgeInsets.symmetric(vertical: 20),
+                filled: true,
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.transparent),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.transparent),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.transparent),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                hintText: 'Önem Seviyesi Seçin...',
+                hintStyle: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                  color: Colors.grey,
+                ),
+              ),
+            ),
+            popupProps: PopupProps.dialog(
+              itemBuilder: (context, item, isDisabled, isSelected) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12.0),
+                  child: Text(
+                    item.$1,
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                    textAlign: TextAlign.center,
+                  ),
+                );
+              },
+              showSearchBox: false,
+              title: Container(
+                decoration: BoxDecoration(color: AppColors.ALLERGEO_GREEN),
+                alignment: Alignment.center,
+                padding: EdgeInsets.symmetric(vertical: 16),
+                child: Text(
+                  'Önem Seviyesi',
+                  style: TextStyle(
+                    fontSize: 21,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white70,
+                  ),
+                ),
+              ),
+              dialogProps: DialogProps(
+                clipBehavior: Clip.antiAlias,
+                shape: OutlineInputBorder(
+                  borderSide: BorderSide(width: 0),
+                  borderRadius: BorderRadius.circular(25),
+                ),
+              ),
+            ),
           ),
           SizedBox(height: 16),
           Container(
