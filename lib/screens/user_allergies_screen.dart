@@ -118,28 +118,36 @@ class _UserAllergiesScreen extends State<UserAllergiesScreen> {
                   color: AppColors.ALLERGEO_GREEN,
                 ),
               )
-              : Column(
-                children: [
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: userAllergies!.length,
-                      itemBuilder: (context, index) {
-                        return UserAllergiesListItem(
-                          userAllergy: userAllergies![index],
-                          onUpdate: _handleUpdate,
-                          onDelete: (deletedAllergy) {
-                            _deleteAllergy(deletedAllergy);
-                          },
-                        );
-                      },
+              : Padding(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: userAllergies!.length,
+                        itemBuilder: (context, index) {
+                          return Column(
+                            children: [
+                              UserAllergiesListItem(
+                                userAllergy: userAllergies![index],
+                                onUpdate: _handleUpdate,
+                                onDelete: (deletedAllergy) {
+                                  _deleteAllergy(deletedAllergy);
+                                },
+                              ),
+                              SizedBox(height: 8),
+                            ],
+                          );
+                        },
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showAddAllergyModal(context),
         backgroundColor: AppColors.ALLERGEO_GREEN,
-        child: const Icon(Icons.add, color: Colors.white,),
+        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }

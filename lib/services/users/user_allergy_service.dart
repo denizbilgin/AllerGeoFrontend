@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:allergeo/config/constants.dart';
 import 'package:allergeo/models/allergies/user_allergy_model.dart';
 import 'package:allergeo/models/users/user_model.dart';
@@ -145,4 +147,13 @@ class UserAllergyService {
     }
   }
   
+  String getAllergenImage(UserAllergyModel userAllergy) {
+    if (userAllergy.allergen.images.isNotEmpty) {
+      final random = Random();
+      return userAllergy.allergen.images[random.nextInt(
+        userAllergy.allergen.images.length,
+      )];
+    }
+    return 'assets/images/default_allergen_image.jpg';
+  }
 }

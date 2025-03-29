@@ -6,21 +6,22 @@ import 'package:allergeo/services/users/user_allergy_service.dart';
 import 'package:allergeo/services/users/user_service.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class UpdateUserAllergyScreen extends StatefulWidget {
+class UserAllergyDetailScreen extends StatefulWidget {
   final UserAllergyModel userAllergy;
   final Function(UserAllergyModel) onUpdate;
 
-  const UpdateUserAllergyScreen({
+  const UserAllergyDetailScreen({
     required this.userAllergy,
     required this.onUpdate,
   });
 
   @override
-  _UpdateUserAllergyScreen createState() => _UpdateUserAllergyScreen();
+  _UserAllergyDetailScreen createState() => _UserAllergyDetailScreen();
 }
 
-class _UpdateUserAllergyScreen extends State<UpdateUserAllergyScreen> {
+class _UserAllergyDetailScreen extends State<UserAllergyDetailScreen> {
   late int _selectedImportanceLevel;
   UserAllergyService service = UserAllergyService();
   UserService userService = UserService();
@@ -38,6 +39,15 @@ class _UpdateUserAllergyScreen extends State<UpdateUserAllergyScreen> {
     ("Yüksek", 4),
     ("Çok Yüksek", 5),
   ];
+
+  Future<void> _launchURL(link) async {
+    final Uri url = Uri.parse(link);
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url, mode: LaunchMode.externalApplication);
+    } else {
+      debugPrint("Bağlantı açılamadı: $link");
+    }
+  }
 
   void _updateAllergy() async {
     try {
@@ -96,17 +106,128 @@ class _UpdateUserAllergyScreen extends State<UpdateUserAllergyScreen> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.network(
+                  service.getAllergenImage(widget.userAllergy),
+                  width: 100,
+                  height: 100,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              SizedBox(width: 12),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.userAllergy.allergen.name,
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.left,
+                  ),
+                  Text(
+                    'Tür: ${widget.userAllergy.allergen.speciesName}',
+                    textAlign: TextAlign.left,
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                  InkWell(
+                    onTap:
+                        () =>
+                            _launchURL(widget.userAllergy.allergen.familyLink),
+                    child: Text(
+                      'Aile: ${widget.userAllergy.allergen.family}',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                        color: Colors.grey,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ),
+                  Text(
+                    'Alerjen Tipi: ${widget.userAllergy.allergen.allergenType.name}',
+                    textAlign: TextAlign.left,
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          SizedBox(height: 16),
+          SizedBox(
+            height: 100,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: widget.userAllergy.allergen.images.length,
+              itemBuilder: (context, index) {
+                String imageUrl = widget.userAllergy.allergen.images[index];
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: GestureDetector(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        barrierColor: Colors.black.withOpacity(0.8),
+                        builder: (context) {
+                          double screenWidth = MediaQuery.of(context).size.width;
+                          double screenHeight = MediaQuery.of(context).size.height;
+                          double imageSize = screenWidth < screenHeight ? screenWidth * 0.8 : screenHeight * 0.8;
+
+                          return GestureDetector(
+                            onTap: () => Navigator.pop(context),
+                            child: Container(
+                              color: Colors.transparent,
+                              alignment: Alignment.center,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(12),
+                                child: Image.network(
+                                  imageUrl,
+                                  width: imageSize,
+                                  height: imageSize,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.network(
+                        imageUrl,
+                        width: 100,
+                        height: 100,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    
+                  ),
+                );
+              },
+            ),
+          ),
+          SizedBox(height: 16),
+          ElevatedButton(
+            onPressed: () => _launchURL(widget.userAllergy.allergen.link),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.ALLERGEO_GREEN,
+            ),
+            child: Text(
+              'Detaylı Bilgi İçin Tıklayınız',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+          SizedBox(height: 24),
           Text(
-            "Alerji Güncelle",
+            "Alerjimi Güncelle",
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 16),
           Align(
             alignment: Alignment.centerLeft,
-            child: Text(
-              'Önem Seviyesi:',
-              style: TextStyle(fontSize: 16),
-            ),
+            child: Text('Önem Seviyesi:', style: TextStyle(fontSize: 16)),
           ),
           SizedBox(height: 8),
           DropdownSearch<(String, int)>(
