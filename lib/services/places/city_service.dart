@@ -44,7 +44,14 @@ class CityService {
 
   Future<CityModel> fetchCityByName(String cityName) async {
     try {
-      final response = await http.get(Uri.parse("$citiesUrl$cityName"));
+      String token = await userService.getUserAccessToken();
+      final response = await http.get(
+        Uri.parse("$citiesUrl$cityName"),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+      );
 
       if (response.statusCode == 200) {
         String data = utf8.decode(response.bodyBytes);

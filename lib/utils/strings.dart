@@ -6,3 +6,10 @@ class Strings {
   static const String APP_SHORT_DESCRIPTION = "Alerjik Bireyler için Günlük Yaşamı Kolaylaştıran Seyahat Yardımcısı";
   static const String CREATE_TRAVEL = 'Seyahat Oluştur';
 }
+
+extension StringCasingExtension on String {
+  String capitalize() {
+    if (isEmpty) return '';
+    return '${this[0].toUpperCase()}${substring(1).toLowerCase()}';
+  }
+}

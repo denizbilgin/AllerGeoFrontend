@@ -83,4 +83,30 @@ class DistrictService {
       throw "Bir hata oluştu: $e";
     }
   }
+
+  Future<DistrictModel> fetchDistrictByCoordinates(double latitude, double longitude) async {
+    try {
+      String token = await userService.getUserAccessToken();
+      final Uri url = Uri.parse("${districtsUrl}retrieve-by-coordinates?latitude=$latitude&longitude=$longitude");
+      final response = await http.get(
+        url,
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        String data = utf8.decode(response.bodyBytes);
+        final Map<String, dynamic> jsonData = json.decode(data);
+        return DistrictModel.fromJson(jsonData);
+      } else if(response.statusCode == 404){
+        throw jsonDecode(response.body).values.first;
+      } else {
+        throw jsonDecode(response.body).values.first;
+      }
+    } catch (e) {
+      throw "Bir hata oluştu: $e";
+    }
+  }
 }

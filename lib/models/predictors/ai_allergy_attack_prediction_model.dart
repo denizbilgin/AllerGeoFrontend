@@ -3,6 +3,7 @@ import 'package:allergeo/models/places/district_model.dart';
 import 'package:allergeo/models/predictors/ai_model_model.dart';
 import 'package:allergeo/models/users/travel_model.dart';
 import 'package:allergeo/models/users/user_model.dart';
+import 'package:latlong2/latlong.dart';
 
 class AIAllergyAttackPredictionModel {
   final int? id;
@@ -13,6 +14,7 @@ class AIAllergyAttackPredictionModel {
   bool? hadAllergyAttack;
   final AIModelModel? model;
   TravelModel? travel;
+  final LatLng? selectedLocation;
 
   AIAllergyAttackPredictionModel({
     this.id,
@@ -22,7 +24,8 @@ class AIAllergyAttackPredictionModel {
     this.aiPrediction,
     this.hadAllergyAttack,
     this.model,
-    this.travel
+    this.travel,
+    this.selectedLocation
   });
 
   // Factory constructor
