@@ -1,7 +1,9 @@
 import 'package:allergeo/config/colors.dart';
 import 'package:allergeo/models/places/district_model.dart';
 import 'package:allergeo/models/predictors/ai_allergy_attack_prediction_model.dart';
+import 'package:allergeo/models/users/travel_model.dart';
 import 'package:allergeo/services/places/district_service.dart';
+import 'package:allergeo/services/users/travel_service.dart';
 import 'package:allergeo/services/users/user_service.dart';
 import 'package:allergeo/utils/strings.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +25,7 @@ class _TravelScreenState extends State<TravelScreen> {
   final MapController _mapController = MapController();
   final DistrictService districtService = DistrictService();
   final UserService userService = UserService();
+  TravelService travelService = TravelService();
 
   LatLng _currentCenter = LatLng(41.00527, 28.97696);
   List<AIAllergyAttackPredictionModel> _waypoints = [];
@@ -109,8 +112,10 @@ class _TravelScreenState extends State<TravelScreen> {
 
     final waypointsString = _waypoints
         .map(
-          (wp) =>"${wp.selectedLocation!.longitude},${wp.selectedLocation!.latitude}",
-        ).join(";");
+          (wp) =>
+              "${wp.selectedLocation!.longitude},${wp.selectedLocation!.latitude}",
+        )
+        .join(";");
     final url =
         "https://router.project-osrm.org/route/v1/driving/$waypointsString?overview=full&geometries=geojson";
 
@@ -126,6 +131,44 @@ class _TravelScreenState extends State<TravelScreen> {
     }
   }
 
+  void _createTravel() async {
+    try {
+      var token = await userService.getUserAccessToken();
+      var userId = await userService.getUserIdFromToken(token);
+      var user = await userService.fetchUserById(userId);
+
+      if (_waypoints.length == 0) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Lütfen en az bir durak noktası ekleyin.")),
+        );
+        return;
+      }
+
+      TravelModel travel = TravelModel(
+        user: user,
+        startDate: _waypoints[0].date,
+        returnDate: _waypoints.length > 1 ? _waypoints.last.date : _waypoints.first.date,
+      );
+
+      TravelModel travelReturned = await travelService.createUserTravel(travel);
+      for (AIAllergyAttackPredictionModel waypoint in _waypoints) {
+        waypoint.travel = travel;
+      }
+      await travelService.createUserTravelWaypoints(_waypoints, travelReturned.id!);
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Seyahat Oluşturuldu")));
+      return;
+    } catch (e) {
+      print(e);
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Bir hata oluştu: $e")));
+      return;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width * 0.95;
@@ -134,13 +177,20 @@ class _TravelScreenState extends State<TravelScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Seyahat Planlayıcı',
+          Strings.CREATE_TRAVEL,
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: AppColors.ALLERGEO_GREEN,
       ),
       body: Column(
         children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+            child: Text(
+              Strings.CREATE_TRAVEL_INFO,
+              style: TextStyle(color: Colors.grey),
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
@@ -160,6 +210,7 @@ class _TravelScreenState extends State<TravelScreen> {
                       ),
                     ),
                     onFieldSubmitted: (value) => _searchLocation(),
+                    cursorColor: AppColors.ALLERGEO_GREEN,
                   ),
                 ),
               ],
@@ -215,19 +266,74 @@ class _TravelScreenState extends State<TravelScreen> {
             ),
           ),
           Expanded(
-            child: ListView.builder(
-              itemCount: _waypoints.length,
-              itemBuilder: (context, index) {
-                AIAllergyAttackPredictionModel waypoint = _waypoints[index];
-                return ListTile(
-                  title: Text(
-                    "${index + 1}. Durak: ${waypoint.district.name.capitalize()}/${waypoint.district.city.name.capitalize()}",
-                  ),
-                  subtitle: Text(
-                    "Tarih: ${waypoint.date.day}/${waypoint.date.month}/${waypoint.date.year}",
-                  ),
-                );
-              },
+            child: Scrollbar(
+              thumbVisibility: true,
+              child: ListView.builder(
+                itemCount: _waypoints.length,
+                itemBuilder: (context, index) {
+                  AIAllergyAttackPredictionModel waypoint = _waypoints[index];
+                  return ListTile(
+                    contentPadding: EdgeInsets.symmetric(
+                      vertical: 5,
+                      horizontal: 15,
+                    ),
+                    leading: Icon(
+                      Icons.location_on,
+                      color: AppColors.ALLERGEO_GREEN,
+                      size: 30,
+                    ),
+                    title: Text(
+                      "${index + 1}. Durak: ${waypoint.district.name.capitalize()}/${waypoint.district.city.name.capitalize()}",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: Text(
+                      "Tarih: ${waypoint.date.day}/${waypoint.date.month}/${waypoint.date.year}",
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                    trailing: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 5,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.ALLERGEO_GREEN.shade100,
+                        borderRadius: BorderRadius.circular(15),
+                        border: Border.all(
+                          color: AppColors.ALLERGEO_GREEN,
+                          width: 2,
+                        ),
+                      ),
+                      child: Text(
+                        'AI Tahmini',
+                        style: TextStyle(
+                          color: AppColors.ALLERGEO_GREEN,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: SizedBox(
+              width: 200,
+              child: ElevatedButton(
+                onPressed: () {
+                  _createTravel();
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.ALLERGEO_GREEN,
+                  side: BorderSide.none,
+                  shape: const StadiumBorder(),
+                ),
+                child: const Text(
+                  Strings.CREATE_TRAVEL,
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
             ),
           ),
         ],

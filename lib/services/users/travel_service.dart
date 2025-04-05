@@ -1,11 +1,13 @@
 import 'package:allergeo/config/constants.dart';
 import 'package:allergeo/models/predictors/ai_allergy_attack_prediction_model.dart';
 import 'package:allergeo/models/users/travel_model.dart';
+import 'package:allergeo/services/users/user_service.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class TravelService {
   final String usersUrl = AppConstants.usersUrl;
+  UserService userService = UserService();
 
   Future<List<TravelModel>> fetchUserTravels(int userId) async {
     try {
@@ -45,13 +47,14 @@ class TravelService {
 
   Future<TravelModel> createUserTravel(TravelModel travel) async {
     try {
+      String token = await userService.getUserAccessToken();
       final url = "$usersUrl${travel.user.id}/travels";
       
       final response = await http.post(
         Uri.parse(url),
         headers: {
-          "Content-Type": "application/json",
-          // "Authorization": "Bearer $token"
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
         },
         body: jsonEncode(travel.toJson()),
       );
@@ -147,15 +150,15 @@ class TravelService {
     }
   }
 
-  Future<List<AIAllergyAttackPredictionModel>> createUserTravelWaypoints(List<AIAllergyAttackPredictionModel> waypoints) async {
+  Future<List<AIAllergyAttackPredictionModel>> createUserTravelWaypoints(List<AIAllergyAttackPredictionModel> waypoints, int travelId) async {
     try {
-      final url = "$usersUrl${waypoints[0].user.id}/travels/${waypoints[0].travel!.id}/waypoints";
-      
+      final url = "$usersUrl${waypoints[0].user.id}/travels/$travelId/waypoints";
+      String token = await userService.getUserAccessToken();
       final response = await http.post(
         Uri.parse(url),
         headers: {
-          "Content-Type": "application/json",
-          // "Authorization": "Bearer $token"
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
         },
         body: jsonEncode(toJsonMultiple(waypoints)),
       );

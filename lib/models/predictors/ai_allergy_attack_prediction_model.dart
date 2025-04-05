@@ -39,6 +39,12 @@ class AIAllergyAttackPredictionModel {
       hadAllergyAttack: json['had_allergy_attack'],
       model: json['model'] != null ? AIModelModel.fromJson(json['model']) : null,
       travel: json['travel'] != null ? TravelModel.fromJson(json["travel"]) : null,
+      selectedLocation: json['selected_latitude'] != null && json['selected_longitude'] != null
+          ? LatLng(
+              json['selected_latitude'],
+              json['selected_longitude'],
+            )
+          : null,
     );
   }
 
@@ -49,6 +55,8 @@ class AIAllergyAttackPredictionModel {
       "district_id": district.id,
       "had_allergy_attack": hadAllergyAttack,
       "travel_id": travel?.id,
+      "selected_latitude": selectedLocation?.latitude,
+      "selected_longitude": selectedLocation?.longitude,
     };
   }
 
