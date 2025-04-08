@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:allergeo/config/colors.dart';
 import 'package:allergeo/models/allergies/user_allergy_model.dart';
 import 'package:allergeo/screens/user_allergy_detail_screen.dart';
@@ -141,7 +139,7 @@ class UserAllergiesListItem extends StatelessWidget {
                                 style: TextStyle(fontStyle: FontStyle.italic),
                               ),
                               TextSpan(
-                                text: userAllergy.creationDate?.toLocal().toString().split(' ')[0],
+                                text: '${userAllergy.creationDate!.day}/${userAllergy.creationDate!.month}/${userAllergy.creationDate!.year}',
                               ),
                             ],
                           ),

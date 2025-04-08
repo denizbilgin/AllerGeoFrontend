@@ -11,11 +11,17 @@ class TravelService {
 
   Future<List<TravelModel>> fetchUserTravels(int userId) async {
     try {
-      final response = await http.get(Uri.parse("$usersUrl$userId/travels"));
+      String token = await userService.getUserAccessToken();
+      final response = await http.get(
+        Uri.parse("$usersUrl$userId/travels"),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+      );
 
       if (response.statusCode == 200) {
         String data = utf8.decode(response.bodyBytes);
-        print(data);
         return travelsFromJson(data);
       } else if(response.statusCode == 404){
         throw jsonDecode(response.body).values.first;
@@ -111,13 +117,13 @@ class TravelService {
       }
 
       final url = "$usersUrl$userId/travels/$travelId";
-      
+      String token = await userService.getUserAccessToken();
       final response = await http.delete(
         Uri.parse(url),
         headers: {
-          "Content-Type": "application/json",
-          // "Authorization": "Bearer $token"
-        }
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
       );
 
       if (response.statusCode == 204) {
@@ -135,7 +141,14 @@ class TravelService {
   // Waypoint Functions
   Future<List<AIAllergyAttackPredictionModel>> fetchUserTravelWaypointsById(int userId, int travelId) async {
     try {
-      final response = await http.get(Uri.parse("$usersUrl$userId/travels/$travelId/waypoints"));
+      String token = await userService.getUserAccessToken();
+      final response = await http.get(
+        Uri.parse("$usersUrl$userId/travels/$travelId/waypoints"),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+      );
 
       if (response.statusCode == 200) {
         String data = utf8.decode(response.bodyBytes);
@@ -226,13 +239,13 @@ class TravelService {
   Future<bool> deleteUserTravelWaypoint(int userId, int travelId, int waypointId) async {
     try {
       final url = "$usersUrl$userId/travels/$travelId/waypoints/$waypointId";
-      
+      String token = await userService.getUserAccessToken();
       final response = await http.delete(
         Uri.parse(url),
         headers: {
-          "Content-Type": "application/json",
-          // "Authorization": "Bearer $token"
-        }
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
       );
 
       if (response.statusCode == 204) {

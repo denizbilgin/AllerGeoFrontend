@@ -3,7 +3,7 @@ import 'package:allergeo/screens/login_screen.dart';
 import 'package:allergeo/screens/profile_screen.dart';
 import 'package:allergeo/screens/travel_screen.dart';
 import 'package:allergeo/screens/user_allergies_screen.dart';
-import 'package:allergeo/screens/user_allergy_attacks_screen.dart';
+import 'package:allergeo/screens/user_travels_screen.dart';
 import 'package:allergeo/widgets/custom_bottom_navigation_bar.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +48,8 @@ class _MainPageState extends State<MainPage> {
     TravelScreen(),
     UserAllergiesScreen(),
     HomeScreen(),
-    UserAllergyAttacksScreen(),
+    UserTravelsScreen(),
+    //UserAllergyAttacksScreen(),
     ProfileScreen(),
   ];
 

@@ -82,7 +82,7 @@ class _TravelScreenState extends State<TravelScreen> {
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Lütfen Türkiye'de Bir Yer Seçin. Hata: $e")),
+        SnackBar(content: Text("Lütfen Türkiye'de Bir Yer Seçin.")),
       );
       return;
     }
