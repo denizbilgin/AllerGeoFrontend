@@ -67,6 +67,7 @@ class _UserTravelsListItemState extends State<UserTravelsListItem> {
       builder:
           (context) => UserTravelDetailScreen(
             travel: widget.travel,
+            waypoints: waypoints!,
             onUpdate: widget.onUpdate,
           ),
     );
@@ -127,7 +128,11 @@ class _UserTravelsListItemState extends State<UserTravelsListItem> {
         widget.travel.returnDate!.isBefore(now)) {
       return Text(
         ' Geçmiş',
-        style: TextStyle(color: Colors.grey.shade500, fontWeight: FontWeight.bold, fontSize: 16),
+        style: TextStyle(
+          color: Colors.grey.shade500,
+          fontWeight: FontWeight.bold,
+          fontSize: 16,
+        ),
       );
     }
 
@@ -136,12 +141,20 @@ class _UserTravelsListItemState extends State<UserTravelsListItem> {
             widget.travel.returnDate!.isAfter(now))) {
       return Text(
         ' Devam Ediyor',
-        style: TextStyle(color: AppColors.ALLERGEO_GREEN.shade300, fontWeight: FontWeight.bold, fontSize: 16),
+        style: TextStyle(
+          color: AppColors.ALLERGEO_GREEN.shade300,
+          fontWeight: FontWeight.bold,
+          fontSize: 16,
+        ),
       );
     }
     return Text(
       ' Yaklaşan',
-      style: TextStyle(color: const Color.fromARGB(255, 231, 187, 40), fontWeight: FontWeight.bold, fontSize: 16),
+      style: TextStyle(
+        color: const Color.fromARGB(255, 231, 187, 40),
+        fontWeight: FontWeight.bold,
+        fontSize: 16,
+      ),
     );
   }
 
@@ -208,23 +221,20 @@ class _UserTravelsListItemState extends State<UserTravelsListItem> {
                       ),
                       const SizedBox(width: 8),
                       Text(
-                        "Başlangıç: ${widget.travel.startDate.day}/${widget.travel.startDate.month}/${widget.travel.startDate.year}",
-                        style: TextStyle(color: Colors.grey.shade600),
+                        "${widget.travel.startDate.day}/${widget.travel.startDate.month}/${widget.travel.startDate.year}",
+                        style: TextStyle(color: Colors.grey.shade700),
                       ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  if (widget.travel.returnDate != null)
-                    Row(
-                      children: [
-                        const Icon(Icons.home, color: Colors.red),
-                        const SizedBox(width: 8),
+                      if (widget.travel.returnDate != null) ...[
+                        const SizedBox(width: 4),
+                        const Icon(Icons.remove, size: 16),
+                        const SizedBox(width: 4),
                         Text(
-                          "Dönüş: ${widget.travel.returnDate!.day}/${widget.travel.returnDate!.month}/${widget.travel.returnDate!.year}",
-                          style: TextStyle(color: Colors.grey.shade600),
+                          "${widget.travel.returnDate!.day}/${widget.travel.returnDate!.month}/${widget.travel.returnDate!.year}",
+                          style: TextStyle(color: Colors.grey.shade700),
                         ),
                       ],
-                    ),
+                    ],
+                  ),
                   const SizedBox(height: 8),
                   Row(
                     children: [

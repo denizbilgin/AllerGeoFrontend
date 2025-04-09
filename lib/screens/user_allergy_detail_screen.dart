@@ -221,7 +221,7 @@ class _UserAllergyDetailScreen extends State<UserAllergyDetailScreen> {
           ),
           SizedBox(height: 24),
           Text(
-            "Alerjimi Güncelle",
+            "Alerji Bilgilerim",
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 16),
