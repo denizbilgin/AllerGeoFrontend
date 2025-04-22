@@ -2,14 +2,15 @@ import 'package:allergeo/screens/home_screen.dart';
 import 'package:allergeo/screens/login_screen.dart';
 import 'package:allergeo/screens/profile_screen.dart';
 import 'package:allergeo/screens/travel_screen.dart';
-import 'package:allergeo/screens/user_allergies_screen.dart';
-import 'package:allergeo/screens/user_travels_screen.dart';
+import 'package:allergeo/screens/allergies_screen.dart';
+import 'package:allergeo/screens/travels_screen.dart';
 import 'package:allergeo/widgets/custom_bottom_navigation_bar.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:allergeo/config/colors.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -29,6 +30,17 @@ class AllerGeoApp extends StatelessWidget {
       navigatorKey: navigatorKey,
       theme: ThemeData(primarySwatch: AppColors.ALLERGEO_GREEN),
       home: MainPage(),
+
+      locale: const Locale('tr'),
+      supportedLocales: const [
+        Locale('tr'),
+        Locale('en'),
+      ],
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
     );
   }
 }

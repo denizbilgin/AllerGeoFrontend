@@ -19,7 +19,6 @@ class TravelService {
           'Content-Type': 'application/json',
         },
       );
-
       if (response.statusCode == 200) {
         String data = utf8.decode(response.bodyBytes);
         return travelsFromJson(data);
@@ -35,7 +34,14 @@ class TravelService {
 
   Future<TravelModel> fetchUserTravelById(int userId, int travelId) async {
     try {
-      final response = await http.get(Uri.parse("$usersUrl$userId/travels/$travelId"));
+      String token = await userService.getUserAccessToken();
+      final response = await http.get(
+        Uri.parse("$usersUrl$userId/travels/$travelId"),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+      );
 
       if (response.statusCode == 200) {
         String data = utf8.decode(response.bodyBytes);
@@ -82,12 +88,12 @@ class TravelService {
   Future<TravelModel> updateUserTravel(TravelModel travel) async {
     try {
       final url = "$usersUrl${travel.user.id}/travels/${travel.id}";
-      
+      String token = await userService.getUserAccessToken();
       final response = await http.patch(
         Uri.parse(url),
         headers: {
-          "Content-Type": "application/json",
-          // "Authorization": "Bearer $token"
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
         },
         body: jsonEncode(travel.toJson()),
       );
@@ -209,13 +215,14 @@ class TravelService {
 
   Future<AIAllergyAttackPredictionModel> updateUserTravelWaypoint(AIAllergyAttackPredictionModel waypoint) async {
     try {
+      String token = await userService.getUserAccessToken();
       final url = "$usersUrl${waypoint.user.id}/travels/${waypoint.travel!.id}/waypoints/${waypoint.id}";
       
       final response = await http.patch(
         Uri.parse(url),
         headers: {
-          "Content-Type": "application/json",
-          // "Authorization": "Bearer $token"
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
         },
         body: jsonEncode(waypoint.toJson()),
       );
@@ -238,6 +245,33 @@ class TravelService {
 
   Future<bool> deleteUserTravelWaypoint(int userId, int travelId, int waypointId) async {
     try {
+      List<AIAllergyAttackPredictionModel> waypoints = await fetchUserTravelWaypointsById(userId, travelId);
+      AIAllergyAttackPredictionModel? waypointIndexToBeDeleted = waypoints.firstWhere((w) => w.id == waypointId, orElse: () => throw "Silinecek waypoint bulunamadı");
+      waypoints.sort((a, b) => a.date.compareTo(b.date));
+      TravelModel travel = await fetchUserTravelById(userId, travelId);
+
+      if (waypoints.length > 1) {
+        bool isFirst = waypoints.first.id == waypointId;
+        bool isLast = waypoints.last.id == waypointId;
+
+        if (isFirst || isLast) {
+          waypoints.removeWhere((w) => w.id == waypointId);
+
+          if (isFirst) {
+            travel.startDate = waypoints.first.date;
+          }
+          if (isLast) {
+            travel.returnDate = waypoints.last.date;
+          }
+
+          await updateUserTravel(travel);
+        }
+      } else {
+        travel.startDate = waypointIndexToBeDeleted.date;
+        travel.returnDate = null;
+        await updateUserTravel(travel);
+      }
+
       final url = "$usersUrl$userId/travels/$travelId/waypoints/$waypointId";
       String token = await userService.getUserAccessToken();
       final response = await http.delete(

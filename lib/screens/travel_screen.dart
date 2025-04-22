@@ -89,10 +89,19 @@ class _TravelScreenState extends State<TravelScreen> {
   }
 
   Future<DateTime?> _selectDate(BuildContext context) async {
-    return await showDatePicker(
+    DateTime initialDate = DateTime.now();
+    DateTime firstDate = DateTime.now();
+
+    if (_waypoints.isNotEmpty) {
+      final lastDate = _waypoints.last.date;
+      firstDate = lastDate.isAfter(DateTime.now()) ? lastDate : DateTime.now();
+      initialDate = firstDate;
+    }
+
+    final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
+      initialDate: initialDate,
+      firstDate: firstDate,
       lastDate: DateTime(2100),
       builder: (context, child) {
         return Theme(
@@ -105,6 +114,8 @@ class _TravelScreenState extends State<TravelScreen> {
         );
       },
     );
+
+    return picked;
   }
 
   Future<void> _getRoute() async {
@@ -147,14 +158,20 @@ class _TravelScreenState extends State<TravelScreen> {
       TravelModel travel = TravelModel(
         user: user,
         startDate: _waypoints[0].date,
-        returnDate: _waypoints.length > 1 ? _waypoints.last.date : _waypoints.first.date,
+        returnDate:
+            _waypoints.length > 1
+                ? _waypoints.last.date
+                : null,
       );
 
       TravelModel travelReturned = await travelService.createUserTravel(travel);
       for (AIAllergyAttackPredictionModel waypoint in _waypoints) {
         waypoint.travel = travel;
       }
-      await travelService.createUserTravelWaypoints(_waypoints, travelReturned.id!);
+      await travelService.createUserTravelWaypoints(
+        _waypoints,
+        travelReturned.id!,
+      );
 
       ScaffoldMessenger.of(
         context,

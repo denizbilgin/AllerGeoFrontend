@@ -44,6 +44,12 @@ class _UserTravelsScreenState extends State<UserTravelsScreen> {
   }
 
   Future<void> _fetchUserTravels() async {
+    bool isSameDay(DateTime date1, DateTime date2) {
+      return date1.year == date2.year &&
+          date1.month == date2.month &&
+          date1.day == date2.day;
+    }
+
     try {
       int userId = await _getUserId();
       var fethedUserTravels = await travelService.fetchUserTravels(userId);
@@ -54,13 +60,17 @@ class _UserTravelsScreenState extends State<UserTravelsScreen> {
       List<TravelModel> pastTravels = [];
 
       for (var travel in fethedUserTravels) {
-        if (travel.startDate.isBefore(now) &&
-            (travel.returnDate == null || travel.returnDate!.isAfter(now))) {
+        if ((travel.startDate.isBefore(now) ||
+                isSameDay(travel.startDate, now)) &&
+            (travel.returnDate == null ||
+                travel.returnDate!.isAfter(now) ||
+                isSameDay(travel.returnDate!, now))) {
           ongoingTravels.add(travel);
         } else if (travel.startDate.isAfter(now)) {
           upcomingTravels.add(travel);
         } else if (travel.returnDate != null &&
-            travel.returnDate!.isBefore(now)) {
+            travel.returnDate!.isBefore(now) &&
+            !isSameDay(travel.returnDate!, now)) {
           pastTravels.add(travel);
         }
       }
@@ -74,7 +84,7 @@ class _UserTravelsScreenState extends State<UserTravelsScreen> {
         travels = sortedTravels;
       });
     } catch (e) {
-      print('Kullanıcı bilgileri alınırken hata: $e');
+      print('Kullanıcı seyahat bilgileri alınırken hata: $e');
     }
   }
 

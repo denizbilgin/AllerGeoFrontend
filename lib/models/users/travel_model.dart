@@ -24,7 +24,9 @@ class TravelModel {
       user: UserModel.fromJson(json['user']),
       creationDate: DateTime.parse(json['creation_date']).toLocal(),
       startDate: DateTime.parse(json['start_date']).toLocal(),
-      returnDate: DateTime.parse(json['return_date']).toLocal(),
+      returnDate: json['return_date'] != null
+          ? DateTime.parse(json['return_date']).toLocal()
+          : null,
     );
   }
 

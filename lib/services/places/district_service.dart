@@ -33,7 +33,14 @@ class DistrictService {
 
   Future<DistrictModel> fetchDistrictById(int districtId) async {
     try {
-      final response = await http.get(Uri.parse("$districtsUrl$districtId"));
+      String token = await userService.getUserAccessToken();
+      final response = await http.get(
+        Uri.parse("$districtsUrl$districtId"),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+        );
 
       if (response.statusCode == 200) {
         String data = utf8.decode(response.bodyBytes);

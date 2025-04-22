@@ -1,7 +1,7 @@
 import 'package:allergeo/config/colors.dart';
 import 'package:allergeo/models/predictors/ai_allergy_attack_prediction_model.dart';
 import 'package:allergeo/models/users/travel_model.dart';
-import 'package:allergeo/screens/user_travel_detail_screen.dart';
+import 'package:allergeo/screens/travel_detail_screen.dart';
 import 'package:allergeo/services/users/travel_service.dart';
 import 'package:allergeo/services/users/user_service.dart';
 import 'package:flutter/material.dart';
@@ -122,10 +122,19 @@ class _UserTravelsListItemState extends State<UserTravelsListItem> {
   }
 
   Text _headerText() {
-    final now = DateTime.now();
+    DateTime now = DateTime.now();
+    DateTime normalize(DateTime date) =>
+        DateTime(date.year, date.month, date.day);
 
-    if (widget.travel.returnDate != null &&
-        widget.travel.returnDate!.isBefore(now)) {
+    final today = normalize(now);
+    final startDate = normalize(widget.travel.startDate);
+    final returnDate =
+        widget.travel.returnDate != null
+            ? normalize(widget.travel.returnDate!)
+            : null;
+
+    if ((returnDate != null && returnDate.isBefore(today)) ||
+        (returnDate == null && startDate.isBefore(today))) {
       return Text(
         ' Geçmiş',
         style: TextStyle(
@@ -136,9 +145,8 @@ class _UserTravelsListItemState extends State<UserTravelsListItem> {
       );
     }
 
-    if (widget.travel.startDate.isBefore(now) &&
-        (widget.travel.returnDate == null ||
-            widget.travel.returnDate!.isAfter(now))) {
+    if ((startDate.isBefore(today) || startDate.isAtSameMomentAs(today)) &&
+        (returnDate == null || returnDate.isAfter(today))) {
       return Text(
         ' Devam Ediyor',
         style: TextStyle(
@@ -148,6 +156,7 @@ class _UserTravelsListItemState extends State<UserTravelsListItem> {
         ),
       );
     }
+
     return Text(
       ' Yaklaşan',
       style: TextStyle(
@@ -258,7 +267,9 @@ class _UserTravelsListItemState extends State<UserTravelsListItem> {
               right: 2,
               child: IconButton(
                 icon: const Icon(Icons.close, color: Colors.black),
-                onPressed: () => _showDeleteConfirmation(context),
+                onPressed: () {
+                  _showDeleteConfirmation(context);
+                },
               ),
             ),
           ],

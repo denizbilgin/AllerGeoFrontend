@@ -50,6 +50,7 @@ class AIAllergyAttackPredictionModel {
 
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
       "user_id": user.id,
       "date": date.toIso8601String(),
       "district_id": district.id,

@@ -1,6 +1,6 @@
 import 'package:allergeo/config/colors.dart';
 import 'package:allergeo/models/allergies/user_allergy_model.dart';
-import 'package:allergeo/screens/user_allergy_detail_screen.dart';
+import 'package:allergeo/screens/allergy_detail_screen.dart';
 import 'package:allergeo/services/users/user_allergy_service.dart';
 import 'package:flutter/material.dart';
 
