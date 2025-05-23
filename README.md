@@ -28,3 +28,9 @@ The app fetches data via RESTful APIs provided by the [AllerGeo backend](https:/
 ## 🔗 Related Projects
 
 - 🔙 [AllerGeo Backend (Django API)](https://github.com/denizbilgin/AllerGeoBackend)
+
+
+## 👨‍🔬 Contributors
+
+- **Deniz Bilgin** – Developer & Project Owner  
+- **Assoc. Prof. Dr. Barış Ethem Süzek** – Academic Advisor & Mentor
