@@ -1,16 +1,30 @@
-# allergeo
+# AllerGeo Frontend 🌿📱  
+*Flutter-based mobile interface for allergy-aware travel planning*
 
-A new Flutter project.
+## 📱 About
 
-## Getting Started
+This repository contains the **Flutter frontend** of the AllerGeo project — a mobile application designed to help allergy-sensitive individuals plan their daily activities and travels based on real-time environmental allergen data.
 
-This project is a starting point for a Flutter application.
+The app fetches data via RESTful APIs provided by the [AllerGeo backend](https://github.com/denizbilgin/AllerGeoBackend) and displays personalized allergen risk maps and recommendations.
 
-A few resources to get you started if this is your first Flutter project:
+## 🚀 Project Status
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- 🛠️ MVP is complete
+- 📲 Scheduled for release on **mobile platforms in Summer 2025**
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 🧑‍💻 Technologies
+
+- Developed with **Flutter**
+- Uses **REST API** to communicate with the backend
+- Built following **clean code principles** and is **well documented**
+
+## 📸 Screenshots
+
+<p float="left">
+  <img src="https://github.com/denizbilgin/AllerGeoFrontend/blob/main/assets/images/user_allergies_ss.jpg" width="200"/>
+  <img src="https://github.com/denizbilgin/AllerGeoFrontend/blob/main/assets/images/creating_travel_ss.png" width="200"/>
+</p>
+
+## 🔗 Related Projects
+
+- 🔙 [AllerGeo Backend (Django API)](https://github.com/denizbilgin/AllerGeoBackend)
