@@ -321,7 +321,7 @@ class _TravelScreenState extends State<TravelScreen> {
                         ),
                       ),
                       child: Text(
-                        'AI Tahmini',
+                        'Temiz',
                         style: TextStyle(
                           color: AppColors.ALLERGEO_GREEN,
                           fontWeight: FontWeight.bold,
